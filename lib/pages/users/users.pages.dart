@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:git_hub_mobile_app/pages/repositories/git.repo.dart';
 import 'package:http/http.dart' as http;
 
 class UserPage extends StatefulWidget {
@@ -115,6 +115,7 @@ class _UserPageState extends State<UserPage> {
                     icon: Icon(Icons.search, color: Colors.deepOrange),
                     onPressed: () {
                       setState(() {
+                        // instead of writing items.clear() we put items = []; to clear the old data
                         items = [];
                         currentPage = 0;
                         query = querytextEditingController.text;
@@ -127,11 +128,19 @@ class _UserPageState extends State<UserPage> {
             SizedBox(height: 10,),
             
             Expanded(
-              child: ListView.builder(
+              child: ListView.separated(
+                separatorBuilder: (context, index) =>
+                Divider(height: 2,color: Colors.deepOrange,),
                 controller:  scrollController,
                 itemCount: items.length,
                   itemBuilder: (context,index){
                     return ListTile(
+                      onTap: (){
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context)=>
+                                GitRepo(login: items[index]['login'],avatarpic: items[index]['avatar_url'],))
+                        );
+                      },
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
